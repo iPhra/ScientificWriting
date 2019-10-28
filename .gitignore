@@ -2,3 +2,5 @@
 # Default ignored files
 /venv
 /.idea
+dataset/preprocessed/*.csv
+dataset/original/*.csv
