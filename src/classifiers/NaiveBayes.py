@@ -4,7 +4,8 @@ from src.classifiers.Classifier import Classifier
 
 class NaiveBayes(Classifier):
 
-    def __init__(self, alpha):
+    def __init__(self, alpha=1.0):
+        super().__init__()
         self.nb = MultinomialNB(alpha)
 
     def fit(self, x, y):

@@ -81,41 +81,49 @@ def main():
         # apply the preprocessing to all rows
         df['tidy_tweet'] = np.vectorize(clean_tweet)(df.tweet)
 
-        df_emoji_final = df[['sentiment'], ['tidy_tweet']]
-        df_emoji_final.columns = ["sentiment", "tweet"]
+        df_final = df[['sentiment', 'tidy_tweet']]
+        df_final.columns = ["sentiment", "tweet"]
 
-        return df_emoji_final
+        return df_final
 
 
 
 
     def create_dataset_sentiment140(n_samples=SAMPLE_SIZE):
-        df = pd.read_csv("../datasets/original/sentiment140.csv", encoding="ISO-8859-1",
+        df = pd.read_csv("../datasets/original/Sentiment140.csv", encoding="ISO-8859-1",
                          names=["sentiment", "id", "date", "query", "user", "tweet"])
 
+        if n_samples < df.shape[0]:
+            df = df.sample(n_samples)  # extract 20k random samples and make a new dataframe
+            df = df.reset_index(drop=True)  # reset the index for all rows
+
+        # Encode sentiment
         df.loc[df.sentiment == 4, 'sentiment'] = 1
 
         df = preprocess(df)
 
-        df.to_csv("../datasets/preprocessed/sentiment140.csv", index=False)
+        df.to_csv("../datasets/preprocessed/Sentiment140.csv", index=False)
 
 
 
     def create_dataset_airlines(n_samples=SAMPLE_SIZE):
-        data = pd.read_csv("../datasets/original/Airline.csv")
+        data = pd.read_csv("../datasets/original/Airline.csv", encoding="ISO-8859-1")
 
-        df = data[["_unit_id", "airline_sentiment", "airline_sentiment:confidence", "text"]]
-        df = df.sample(n_samples)  # extract 20k random samples and make a new dataframe
-        df = df.reset_index(drop=True)  # reset the index for all rows
+        df = data[["airline_sentiment", "text"]]
+        df.columns = ["sentiment", "tweet"]
 
-        # Remove neutral sentiments
-        df = df[df.airline_sentiment != "neutral"]
-        df.loc[df.airline_sentiment == "positive", 'airline_sentiment'] = 1
-        df.loc[df.airline_sentiment == "negative", 'airline_sentiment'] = 0
+        if n_samples < df.shape[0]:
+            df = df.sample(n_samples)  # extract 20k random samples and make a new dataframe
+            df = df.reset_index(drop=True)  # reset the index for all rows
+
+        # Remove neutral sentiments and encode
+        df = df[df["sentiment"] != "neutral"]
+        df.loc[df["sentiment"] == "positive", 'sentiment'] = 1
+        df.loc[df["sentiment"] == "negative", 'sentiment'] = 0
 
         df = preprocess(df)
 
-        df.to_csv("../datasets/preproccesed/airline.csv", index=False)
+        df.to_csv("../datasets/preprocessed/airline.csv", index=False)
 
 
 
