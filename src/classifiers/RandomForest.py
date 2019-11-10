@@ -4,7 +4,7 @@ from src.classifiers.Classifier import Classifier
 
 class RandomForest(Classifier):
 
-    def __init__(self, n=100):
+    def __init__(self, n=300):
         super().__init__()
         self.rf = RandomForestClassifier(n_estimators=n)
 

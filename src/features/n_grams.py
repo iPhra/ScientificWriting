@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 
 
-class Features:
+class N_grams:
 
     def __init__(self):
         self.vectorizer = None
