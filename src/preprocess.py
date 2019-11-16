@@ -132,9 +132,3 @@ def main():
 
     yesno_choice('Do you want to create the Airline Dataset?', callback_yes=(lambda: create_dataset_airlines()))
     print("Done datasets Airline")
-
-
-
-
-if __name__ == '__main__':
-    main()

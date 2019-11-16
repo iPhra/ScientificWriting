@@ -1,5 +1,6 @@
 import os
 
+
 def yesno_choice(title, callback_yes=None, callback_no=None):
     """
     FROM: RecSys2019 repo https://github.com/danmontesi/recsys2019/
@@ -15,7 +16,7 @@ def yesno_choice(title, callback_yes=None, callback_no=None):
     print(f'{title} (y/n)')
     valid_inp = ['y', 'n']
 
-    while (True):
+    while True:
         inp = input()
         if inp in valid_inp:
             if inp == 'y':
