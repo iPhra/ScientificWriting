@@ -111,8 +111,8 @@ class Main:
 
     def compare_ngrams_rf(self):
         res = []
-        for components in (10, 100, 500):
-            for i in range(1, 2):
+        for components in (100, 500):
+            for i in range(1, 3):
                 for j in range(i, 6):
                     print("Training with ngrams: ", (i, j))
                     self.parameters["ngrams"] = (i, j)
@@ -120,7 +120,7 @@ class Main:
                     self.get_features(tfidf=True)
                     rf = RandomForest.RandomForest(n=components)
                     rf.fit(self.X_train, self.y_train)
-                    accuracy = Evaluator.evaluate_classifier(self.y_valid, rf.predict(self.X_valid))
+                    accuracy = Evaluator.evaluate_classifier(self.y_test, rf.predict(self.X_test))
                     res.append(((i, j, components), accuracy))
         print(sorted(res, key=lambda x: x[1], reverse=True))
 
@@ -128,7 +128,7 @@ class Main:
     def compare_ngrams_nb(self):
         res = []
         for a in (1, 10, 100):
-            for i in range(1, 2):
+            for i in range(1, 3):
                 for j in range(i, 7):
                     print("Training with ngrams: ", (i, j))
                     self.parameters["ngrams"] = (i, j)
@@ -136,7 +136,7 @@ class Main:
                     self.get_features(tfidf=True)
                     nb = NaiveBayes.NaiveBayes(alpha=a)
                     nb.fit(self.X_train, self.y_train)
-                    accuracy = Evaluator.evaluate_classifier(self.y_valid, nb.predict(self.X_valid))
+                    accuracy = Evaluator.evaluate_classifier(self.y_test, nb.predict(self.X_test))
                     res.append(((i, j, a), accuracy))
         print(sorted(res, key=lambda x: x[1], reverse=True))
 
@@ -144,7 +144,7 @@ class Main:
     def compare_ngrams_svm(self):
         res = []
         for c in (0.1, 1, 10):
-            for i in range(1, 2):
+            for i in range(1, 3):
                 for j in range(i, 7):
                     print("Training with ngrams: ", (i, j))
                     self.parameters["ngrams"] = (i, j)
@@ -152,7 +152,7 @@ class Main:
                     self.get_features(tfidf=True)
                     svm = SVM.SVM(c=c)
                     svm.fit(self.X_train, self.y_train)
-                    accuracy = Evaluator.evaluate_classifier(self.y_valid, svm.predict(self.X_valid))
+                    accuracy = Evaluator.evaluate_classifier(self.y_test, svm.predict(self.X_test))
                     res.append(((i, j, c), accuracy))
         print(sorted(res, key=lambda x: x[1], reverse=True))
 
@@ -162,7 +162,7 @@ class Main:
 
 if __name__ == '__main__':
     parameters = {
-        "dataset": "Sentiment140.csv",
+        "dataset": "Sentiment140_with_stopwords.csv",
         "ngrams": (1, 5),
         "max_features": None,
         "classifier": ["RF"],
@@ -182,5 +182,6 @@ if __name__ == '__main__':
     }
 
     main = Main(commands, parameters)
-    #main.run()
+    main.compare_ngrams_nb()
+    main.compare_ngrams_rf()
     main.compare_ngrams_svm()

@@ -12,7 +12,7 @@ from nltk.stem import PorterStemmer
 
 from src.utils.menu import yesno_choice
 
-SAMPLE_SIZE = 20000
+SAMPLE_SIZE = 40000
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
 
         def laugh_transformer(st):
             # Needs to be enriched
-            if "hah" in st or "heh" in st or "hih" in st:
+            if "hah" in st or "heh" in st or "hih" or "lol" or "lmao" in st:
                 return "laugh_word"
             else:
                 return st
@@ -70,12 +70,12 @@ def main():
         stop_words = set(stopwords.words("english"))  # create a set of stopwords
         stop_words = stop_words.union(["im", "thats"])  # add these stopwords
         negative_stop_words = [w for w in stop_words if "'t" in w]
-        negative_stop_words += ["dont", "cant", "dnt", "not"]  # TODO: maybe search for other skewed neg words
+        negative_stop_words += ["dont", "cant", "dnt", "not"]
         stop_words = stop_words - set(negative_stop_words)  # remove not from the stopwords
 
         # Finally add to the list of words to be removed
         words_to_remove = []
-        words_to_remove += stop_words
+        #words_to_remove += stop_words
         words_to_remove += singletons
 
         # apply the preprocessing to all rows
@@ -102,7 +102,7 @@ def main():
 
         df = preprocess(df)
 
-        df.to_csv("../datasets/preprocessed/Sentiment140.csv", index=False)
+        df.to_csv("../datasets/preprocessed/Sentiment140_with_stopwords.csv", index=False)
 
 
 
